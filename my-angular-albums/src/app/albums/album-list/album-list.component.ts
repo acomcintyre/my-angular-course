@@ -1,24 +1,30 @@
-import { Component, OnInit } from '@angular/core';
-import { Album } from '../album.model';
-import { ALBUMS } from '../albums.data';
+import { Component, OnInit } from "@angular/core";
+
+import { AlbumService } from "../shared/album.service";
+import { Album } from "../album.model";
 
 @Component({
-    selector: 'app-album-list',
-    templateUrl: './album-list.component.html',
-    styleUrls: ['./album-list.component.css'],
+  selector: "app-album-list",
+  templateUrl: "./album-list.component.html",
+  styleUrls: ["./album-list.component.css"]
 })
 export class AlbumListComponent implements OnInit {
-    albumsArray: Album[];
+  albumsArray: Album[];
 
-    ngOnInit(): void {
-        this.albumsArray = this.albumsArray = ALBUMS;
-    }
+  constructor(private albumService: AlbumService) { }
 
-    parentFunctionHandler(album) {
-        alert(
-            'Album ' +
-                album.albumName +
-                ' was sent from the album card component'
-        );
-    }
+  ngOnInit(): void {
+    this.getAlbums();
+   }
+
+   parentFunctionHandler(album) {
+    alert('Album ' + album.albumName + ' was sent from the album card component');
+  }
+
+  getAlbums() {
+    this.albumService.getAlbums()
+    .subscribe(
+        albums => this.albumsArray = albums,
+        error => console.log("Error: ", error));
+  }
 }
